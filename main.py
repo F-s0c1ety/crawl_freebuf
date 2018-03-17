@@ -20,12 +20,16 @@ def get_artical_list(res):
 def print_pdf(info_tuple):
     title, url = info_tuple
     #os.mknod(title+'.pdf')
-    os.system('touch {}.pdf'.format(title))
     child_process = subprocess.Popen(['google-chrome',
             '--headless',
             '--disable-gpu',
             '--print-to-pdf={}.pdf'.format(title),
+            '--virtual-time-budget=3000000',
             url])
+    try:
+        child_process.communicate(timeout=15)
+    except:
+        child_process.kill()
 
 if __name__ == '__main__':
     res = requests.get('http://www.freebuf.com/')
